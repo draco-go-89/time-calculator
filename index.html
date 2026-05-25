@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Calculator</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #4fd6cb;
+            color: #1c1e21;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            margin-bottom: 1.5rem;
+            color: #606770;
+        }
+        input, select, button {
+            font-size: 1rem;
+            padding: 0.75rem;
+            margin: 0.25rem;
+            border-radius: 6px;
+            border: 1px solid #dddfe2;
+        }
+        input[type="number"] {
+            width: 80px;
+            color: #3a1866;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Time Calculator ️</h1>
+        <p>Enter a value and select a unit to find out what the time was.</p>
+        
+        <div>
+            <input type="number" id="timeValue" placeholder="Number" min="1" required>
+            <select id="timeUnit">
+                <option value="minutes">Minutes ago</option>
+                <option value="hours">Hours ago</option>
+            </select>
+            <button onclick="calculatePastTime()"> Calculate
+             </button>
+        </div>
+        
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculatePastTime() {
+            // 1. Get the current date and time
+            const now = new Date();
+
+            // 2. Get the user's input values
+            const value = parseInt(document.getElementById('timeValue').value);
+            const unit = document.getElementById('timeUnit').value;
+            const resultElement = document.getElementById('result');
+
+            // 3. Check if the input number is valid
+            if (isNaN(value) || value <= 0) {
+                resultElement.textContent = "Please enter a valid, positive number bitch.";
+                return;
+            }
+
+            // 4. Create a new date object to hold the calculated past time
+            let pastTime = new Date(now); 
+
+            // 5. Subtract the time based on the selected unit
+            if (unit === 'minutes') {
+                // The setMinutes() method automatically handles rolling back hours/days if needed
+                pastTime.setMinutes(now.getMinutes() - value);
+            } else if (unit === 'hours') {
+                // The setHours() method automatically handles rolling back days if needed
+                pastTime.setHours(now.getHours() - value);
+            }
+
+            // 6. Format the calculated time into a user-friendly string (e.g., "1:15:30 PM")
+            const formattedTime = pastTime.toLocaleTimeString('en-US');
+
+            // 7. Display the final result
+            const unitText = value === 1 ? unit.slice(0, -1) : unit; // Handle plural (minute vs minutes)
+            resultElement.textContent = `The time ${value} ${unitText} ago was ${formattedTime}.`;
+        }
+    </script>
+
+</body>
+</html>
